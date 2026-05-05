@@ -13,6 +13,18 @@ AXIO PREDICT provides a local, privacy-preserving graphical interface for clinic
 
 ---
 
+## Screenshots
+
+| Landing screen | Dark mode |
+|:-:|:-:|
+| ![Landing](electron_app/assets/screenshots/main_screen.png) | ![Dark mode](electron_app/assets/screenshots/dark_mode.png) |
+
+| Risk Assessment Report | Audit Toolkit |
+|:-:|:-:|
+| ![Results](electron_app/assets/screenshots/results_screen.png) | ![Audit Toolkit](electron_app/assets/screenshots/audit_toolkit.png) |
+
+---
+
 ## Features
 
 - **6-year risk scores** — calibrated probabilities of lung cancer development at 1–6 years from scan date
