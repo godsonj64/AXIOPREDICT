@@ -1,0 +1,78 @@
+{
+  "name": "sybil-lung-risk",
+  "version": "2.0.0",
+  "description": "Sybil Lung Cancer Risk Prediction - Desktop Application",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux",
+    "postinstall": "electron-builder install-app-deps",
+    "dist:all": "electron-builder --mac --win"
+  },
+  "build": {
+    "appId": "org.sybil.lung-risk",
+    "productName": "Sybil Risk Predictor",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../python_backend",
+        "to": "python_backend"
+      },
+      {
+        "from": "../sybil-source",
+        "to": "sybil-source"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.medical",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "universal"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "keywords": [
+    "sybil",
+    "lung cancer",
+    "CT scan",
+    "deep learning",
+    "medical imaging"
+  ],
+  "author": "Sybil Research Group",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  }
+}
