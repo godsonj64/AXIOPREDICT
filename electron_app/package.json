@@ -1,7 +1,7 @@
 {
-  "name": "sybil-lung-risk",
-  "version": "2.0.0",
-  "description": "Sybil Lung Cancer Risk Prediction - Desktop Application",
+  "name": "axio-predict",
+  "version": "2.0.1",
+  "description": "Cross-platform desktop application for lung cancer risk prediction from low-dose CT scans, powered by the Sybil v1.6.0 deep learning model.",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
@@ -15,7 +15,7 @@
   },
   "build": {
     "appId": "org.sybil.lung-risk",
-    "productName": "Sybil Risk Predictor",
+    "productName": "AXIO PREDICT",
     "directories": {
       "output": "dist"
     },
@@ -63,14 +63,32 @@
     }
   },
   "keywords": [
-    "sybil",
     "lung cancer",
-    "CT scan",
+    "risk prediction",
+    "low-dose CT",
+    "LDCT",
+    "DICOM",
     "deep learning",
-    "medical imaging"
+    "medical imaging",
+    "sybil",
+    "electron",
+    "desktop app",
+    "attention maps",
+    "clinical decision support"
   ],
-  "author": "Sybil Research Group",
+  "author": {
+    "name": "Godson Johnson",
+    "url": "https://github.com/godsonj64"
+  },
   "license": "MIT",
+  "homepage": "https://github.com/godsonj64/AXIOPREDICT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/godsonj64/AXIOPREDICT.git"
+  },
+  "bugs": {
+    "url": "https://github.com/godsonj64/AXIOPREDICT/issues"
+  },
   "devDependencies": {
     "electron": "^28.0.0",
     "electron-builder": "^24.0.0"

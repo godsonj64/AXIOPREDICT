@@ -1,0 +1,73 @@
+cff-version: 1.2.0
+message: "If you use AXIO PREDICT in your research or clinical workflow, please cite it as below."
+title: "AXIO PREDICT: A Desktop Application for Lung Cancer Risk Prediction from Low-Dose CT Scans"
+version: 2.0.1
+date-released: 2026-05-05
+license: MIT
+url: "https://github.com/godsonj64/AXIOPREDICT"
+repository-code: "https://github.com/godsonj64/AXIOPREDICT"
+abstract: >
+  AXIO PREDICT is a cross-platform desktop application that wraps the Sybil v1.6.0
+  deep learning model for lung cancer risk prediction from low-dose CT (LDCT) scans.
+  It provides a graphical interface for loading DICOM or PNG series, running the
+  Sybil ensemble model, visualising attention maps, and an audit toolkit for
+  proxy attention diagnostics informed by the 2026 Sybil auditing literature.
+keywords:
+  - lung cancer
+  - risk prediction
+  - low-dose CT
+  - LDCT
+  - DICOM
+  - deep learning
+  - medical imaging
+  - Sybil
+  - electron
+  - desktop application
+  - attention maps
+  - clinical decision support
+authors:
+  - family-names: Johnson
+    given-names: Godson
+    alias: godsonj64
+    orcid: ""
+references:
+  - type: article
+    title: "Sybil: A Validated Deep Learning Model to Predict Future Lung Cancer Risk from a Single Low-Dose Chest Computed Tomography"
+    authors:
+      - family-names: Mikhael
+        given-names: Peter G
+      - family-names: Wohlwend
+        given-names: Jeremy
+      - family-names: Yala
+        given-names: Adam
+      - family-names: Karstens
+        given-names: Ludvig
+      - family-names: Xiang
+        given-names: Justin
+      - family-names: Takigami
+        given-names: Angelo K
+      - family-names: Bourgouin
+        given-names: Patrick P
+      - family-names: Chan
+        given-names: PuiYee
+      - family-names: Mrah
+        given-names: Sofiane
+      - family-names: Amayri
+        given-names: Wael
+      - family-names: Juan
+        given-names: Yu-Hsiang
+      - family-names: Yang
+        given-names: Cheng-Ta
+      - family-names: Wan
+        given-names: Yung-Liang
+      - family-names: Balakrishnan
+        given-names: Guha
+      - family-names: Sequist
+        given-names: Lecia V
+      - family-names: Fintelmann
+        given-names: Florian J
+      - family-names: Barzilay
+        given-names: Regina
+    journal: "Journal of Clinical Oncology"
+    year: 2023
+    doi: "10.1200/JCO.22.01345"
