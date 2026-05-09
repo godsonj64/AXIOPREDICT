@@ -10,7 +10,7 @@
     "dist:mac": "electron-builder --mac",
     "dist:win": "electron-builder --win",
     "dist:linux": "electron-builder --linux",
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "bash ../setup.sh && electron-builder install-app-deps",
     "dist:all": "electron-builder --mac --win"
   },
   "build": {

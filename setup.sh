@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────
 # AXIO PREDICT — Python Environment Setup
-# Sybil supports Python 3.8–3.12. This script auto-detects a
-# compatible version and installs all dependencies into .venv/.
+# Sybil's setup.cfg pins python_requires = >=3.8,<3.11, so only
+# Python 3.8, 3.9, or 3.10 work. This script auto-detects one of
+# those and installs all dependencies into .venv/.
 # All pip calls use .venv/bin/python directly — no reliance on
 # shell activation or the system `python3` command.
 # ─────────────────────────────────────────────────────────────
@@ -18,24 +19,19 @@ echo "║      AXIO PREDICT — Environment Setup        ║"
 echo "╚══════════════════════════════════════════════╝"
 echo ""
 
-# ── Find a compatible Python (3.8–3.12) ──────────────────────
+# ── Find a compatible Python (3.8–3.10 only) ─────────────────
+# Sybil's setup.cfg: python_requires = >=3.8,<3.11
 find_compatible_python() {
   local candidates=(
     python3.10
     python3.9
     python3.8
-    python3.11
-    python3.12
     /opt/homebrew/bin/python3.10
     /opt/homebrew/bin/python3.9
     /opt/homebrew/bin/python3.8
-    /opt/homebrew/bin/python3.11
-    /opt/homebrew/bin/python3.12
     /usr/local/bin/python3.10
     /usr/local/bin/python3.9
     /usr/local/bin/python3.8
-    /usr/local/bin/python3.11
-    /usr/local/bin/python3.12
     /usr/bin/python3.10
     /usr/bin/python3.9
     /usr/bin/python3.8
@@ -44,8 +40,10 @@ find_compatible_python() {
     "$HOME/.pyenv/shims/python3.8"
     "$HOME/miniconda3/bin/python3.10"
     "$HOME/miniconda3/bin/python3.9"
+    "$HOME/miniconda3/bin/python3.8"
     "$HOME/anaconda3/bin/python3.10"
     "$HOME/anaconda3/bin/python3.9"
+    "$HOME/anaconda3/bin/python3.8"
   )
 
   for py in "${candidates[@]}"; do
@@ -54,7 +52,7 @@ find_compatible_python() {
       ver=$("$py" -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')" 2>/dev/null) || continue
       major=$(echo "$ver" | cut -d. -f1)
       minor=$(echo "$ver" | cut -d. -f2)
-      if [ "$major" = "3" ] && [ "$minor" -ge 8 ] && [ "$minor" -le 12 ]; then
+      if [ "$major" = "3" ] && [ "$minor" -ge 8 ] && [ "$minor" -le 10 ]; then
         echo "$py"
         return 0
       fi
@@ -66,10 +64,11 @@ find_compatible_python() {
 PYTHON=$(find_compatible_python || true)
 
 if [ -z "$PYTHON" ]; then
-  echo "❌  Could not find Python 3.8–3.12."
+  echo "❌  Could not find Python 3.8, 3.9, or 3.10."
   echo ""
-  echo "  Sybil requires Python 3.8–3.12."
-  echo "  Your system default python3 may be newer (3.13+)."
+  echo "  Sybil's setup.cfg pins python_requires = >=3.8,<3.11,"
+  echo "  so 3.11+ will not work. Your system default python3"
+  echo "  may be newer (3.11/3.12/3.13/3.14)."
   echo ""
   echo "  Install a compatible version:"
   echo "    brew install python@3.10        # Homebrew (recommended)"
@@ -93,7 +92,7 @@ if [ -d ".venv" ]; then
 
   if [ "$EXISTING_MAJOR" != "3" ] || \
      [ "$EXISTING_MINOR" -lt 8 ] || \
-     [ "$EXISTING_MINOR" -gt 12 ] || \
+     [ "$EXISTING_MINOR" -gt 10 ] || \
      [ "$PIP_OK" = "no" ]; then
     echo "→  Existing .venv is broken or incompatible (Python $EXISTING_MAJOR.$EXISTING_MINOR), recreating..."
     rm -rf .venv
