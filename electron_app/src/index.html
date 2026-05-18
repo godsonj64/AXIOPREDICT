@@ -52,7 +52,118 @@
 html, body { height: 100%; font-family: 'Google Sans', 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif; background: var(--md-surface-2); color: var(--md-on-surface); overflow: hidden; user-select: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
 
 /* ── LAYOUT ─────────────────────────────────────────────────── */
-.app-frame { display: grid; grid-template-columns: var(--nav-width) 1fr; height: 100vh; }
+.app-frame {
+  display: grid;
+  grid-template-columns: var(--nav-width) 1fr;
+  grid-template-rows: 40px 1fr;
+  height: 100vh;
+}
+.app-frame > .nav-drawer { grid-row: 2; grid-column: 1; }
+.app-frame > .main-pane  { grid-row: 2; grid-column: 2; }
+
+/* ── CUSTOM GLASSMORPHIC TITLE BAR ─────────────────────────── */
+.app-titlebar {
+  grid-row: 1; grid-column: 1 / -1;
+  position: relative;
+  height: 40px;
+  display: flex; align-items: center;
+  padding: 0 16px;
+  /* Reserve right side for native Win min/max/close overlay (140px); mac
+     traffic lights live on the left so we offset there instead. */
+  padding-right: 148px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.42) 100%);
+  -webkit-backdrop-filter: saturate(180%) blur(22px);
+          backdrop-filter: saturate(180%) blur(22px);
+  border-bottom: 1px solid rgba(15,23,42,0.06);
+  -webkit-app-region: drag;
+  z-index: 60;
+  user-select: none;
+}
+.app-titlebar::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 200% at 0% 0%, rgba(26,115,232,0.08), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0));
+  pointer-events: none;
+}
+.app-titlebar::after {
+  /* hairline highlight line at the top of the bar — gives the glass edge */
+  content: "";
+  position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.85), rgba(255,255,255,0));
+  pointer-events: none;
+}
+.app-titlebar-brand {
+  display: flex; align-items: center; gap: 10px;
+  -webkit-app-region: no-drag;
+  cursor: default;
+  min-width: 0;
+}
+.app-titlebar-logo {
+  width: 22px; height: 22px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(15,23,42,0.20));
+  -webkit-user-drag: none;
+  user-select: none;
+}
+[data-theme="dark"] .app-titlebar-logo {
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.45));
+}
+.app-titlebar-title {
+  font-family: 'Manrope', 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: rgba(15,23,42,0.78);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.app-titlebar-spacer { flex: 1; }
+
+/* macOS — leave space for traffic lights on the LEFT, not the right */
+body.is-mac .app-titlebar { padding-left: 84px; padding-right: 16px; }
+/* Linux frameless — render fallback window controls (drawn in renderer) */
+body.is-linux .app-titlebar { padding-right: 8px; }
+.app-titlebar-controls {
+  display: none;
+  -webkit-app-region: no-drag;
+  gap: 2px;
+}
+body.is-linux .app-titlebar-controls { display: inline-flex; }
+.app-titlebar-controls button {
+  width: 32px; height: 28px; border: none; background: transparent; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: rgba(15,23,42,0.7); border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+.app-titlebar-controls button:hover { background: rgba(15,23,42,0.08); color: rgba(15,23,42,0.95); }
+.app-titlebar-controls button.close:hover { background: #E81123; color: #fff; }
+
+/* ── DARK MODE — title bar ─────────────────────────────────── */
+[data-theme="dark"] .app-titlebar {
+  background: linear-gradient(180deg, rgba(19,19,22,0.62) 0%, rgba(19,19,22,0.42) 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+[data-theme="dark"] .app-titlebar::before {
+  background:
+    radial-gradient(120% 200% at 0% 0%, rgba(168,199,250,0.10), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0));
+}
+[data-theme="dark"] .app-titlebar::after {
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.10), rgba(255,255,255,0));
+}
+[data-theme="dark"] .app-titlebar-title { color: rgba(227,226,230,0.85); }
+[data-theme="dark"] .app-titlebar-controls button { color: rgba(227,226,230,0.78); }
+[data-theme="dark"] .app-titlebar-controls button:hover { background: rgba(255,255,255,0.08); color: #fff; }
+[data-theme="dark"] .app-titlebar-controls button.close:hover { background: #E81123; color: #fff; }
+
+/* ── Match the existing top app bar to the new glass aesthetic ─ */
+.top-app-bar { -webkit-app-region: no-drag; }
 
 /* ── NAVIGATION DRAWER (MD3) ─────────────────────────────────── */
 .nav-drawer {
@@ -2061,16 +2172,136 @@ body, .card, .section-card, .nav-drawer, .top-app-bar {
     border-color var(--md-dur-medium2) var(--md-ease-standard);
 }
 
-/* ── M3 Theme Toggle button ───────────────────────────────────────── */
-.md-theme-toggle {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%;
+/* ── SETUP MODAL — in-app environment provisioning ───────────────── */
+.lightbox-overlay.setup-modal {
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(15,23,42,0.55);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
 }
+.setup-modal-inner {
+  width: min(92vw, 720px);
+  max-height: 86vh;
+  display: flex; flex-direction: column;
+  background: var(--md-surface);
+  color: var(--md-on-surface);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(15,23,42,0.32), 0 4px 16px rgba(15,23,42,0.18);
+  overflow: hidden;
+}
+.setup-modal-head {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px 22px 14px;
+  border-bottom: 1px solid var(--md-outline-variant);
+}
+.setup-modal-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--md-primary);
+  background: var(--md-primary-container);
+  flex-shrink: 0;
+}
+.setup-modal-titles h2 {
+  margin: 0 0 4px 0;
+  font-family: 'Manrope', 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px; font-weight: 700; letter-spacing: -0.01em;
+  color: var(--md-on-surface);
+}
+.setup-modal-titles p {
+  margin: 0;
+  font-size: 13px; line-height: 1.5;
+  color: var(--md-on-surface-variant);
+}
+.setup-modal-x {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--md-on-surface-variant);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.setup-modal-x:hover { background: var(--md-scrim); }
+.setup-modal-x:disabled { opacity: 0.4; cursor: not-allowed; }
+.setup-modal-phase {
+  padding: 10px 22px;
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--md-on-surface-variant);
+  background: var(--md-surface-variant);
+  border-bottom: 1px solid var(--md-outline-variant);
+}
+.setup-modal-log {
+  margin: 0;
+  padding: 16px 22px;
+  flex: 1;
+  min-height: 200px;
+  max-height: 380px;
+  overflow: auto;
+  background: #0d1117;
+  color: #d4d4dc;
+  font-family: 'JetBrains Mono', 'Roboto Mono', 'Consolas', monospace;
+  font-size: 11.5px; line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-top: none;
+  border-bottom: 1px solid var(--md-outline-variant);
+}
+.setup-modal-log::-webkit-scrollbar { width: 8px; }
+.setup-modal-log::-webkit-scrollbar-track { background: transparent; }
+.setup-modal-log::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+.setup-modal-foot {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding: 14px 22px;
+  background: var(--md-surface);
+}
+.setup-modal-foot .btn-filled[disabled],
+.setup-modal-foot .btn-text[disabled] { opacity: 0.55; cursor: not-allowed; }
+
+/* Dark-mode override — surface variant looks washed in dark theme */
+[data-theme="dark"] .setup-modal-inner {
+  background: var(--md-surface);
+  border-color: rgba(255,255,255,0.08);
+}
+[data-theme="dark"] .setup-modal-phase {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.06);
+}
+[data-theme="dark"] .setup-modal-icon {
+  background: var(--md-primary-tint-90);
+  color: var(--md-primary-tone-30);
+}
+
+/* Setup nav button — match other nav-bottom buttons in muted state */
+.nav-setup-btn { color: var(--md-on-surface-variant); }
+.nav-setup-btn svg { flex-shrink: 0; opacity: 0.75; }
+.nav-setup-btn:hover svg { opacity: 1; }
+
+/* ── M3 Theme Toggle button (pill — matches .nav-item) ────────────── */
+/* The button uses the .nav-item class so it inherits the same pill
+   shape, padding, and hover/active state as the side tabs. We only
+   need to swap which SVG icon is visible based on the active theme. */
 .md-theme-toggle .md-theme-icon {
-  transition: transform var(--md-dur-medium3) var(--md-ease-emphasized);
+  width: 20px; height: 20px;
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: transform var(--md-dur-medium3) var(--md-ease-emphasized),
+              opacity 0.15s;
 }
-[data-theme="dark"] .md-theme-toggle .md-theme-icon {
-  transform: rotate(-180deg);
+.md-theme-toggle:hover .md-theme-icon { opacity: 1; }
+.md-theme-toggle .md-theme-icon-sun  { display: none; }
+.md-theme-toggle .md-theme-icon-moon { display: block; }
+[data-theme="dark"] .md-theme-toggle .md-theme-icon-moon { display: none; }
+[data-theme="dark"] .md-theme-toggle .md-theme-icon-sun  { display: block; }
+.md-theme-toggle .md-theme-label {
+  font-size: 14px; font-weight: 500;
+  color: inherit;
 }
 
 /* ════════════════════════════════════════════════════════════════════════
@@ -2360,6 +2591,31 @@ button.icon-btn,
 <div class="app-frame">
 
 <!-- ══════════════════════════════════════════════════════════════
+     CUSTOM GLASSMORPHIC TITLE BAR
+     Replaces the default OS chrome on Windows/Linux. macOS keeps
+     its native traffic lights (rendered over this strip).
+══════════════════════════════════════════════════════════════ -->
+<div class="app-titlebar" role="banner" aria-label="Application title bar">
+  <div class="app-titlebar-brand">
+    <img class="app-titlebar-logo" src="../assets/axiopredict-logo.svg" alt="" aria-hidden="true" draggable="false"/>
+    <span class="app-titlebar-title">AXIO PREDICT</span>
+  </div>
+  <div class="app-titlebar-spacer"></div>
+  <!-- Linux-only fallback controls (Windows uses native overlay, mac uses traffic lights) -->
+  <div class="app-titlebar-controls" id="app-titlebar-controls">
+    <button type="button" class="min" data-act="minimize" title="Minimize" aria-label="Minimize">
+      <svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="5.5" width="8" height="1" fill="currentColor"/></svg>
+    </button>
+    <button type="button" class="max" data-act="maximize" title="Maximize" aria-label="Maximize">
+      <svg width="12" height="12" viewBox="0 0 12 12"><rect x="2.5" y="2.5" width="7" height="7" fill="none" stroke="currentColor"/></svg>
+    </button>
+    <button type="button" class="close" data-act="close" title="Close" aria-label="Close">
+      <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" stroke="currentColor" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
      NAVIGATION DRAWER
 ══════════════════════════════════════════════════════════════ -->
 <nav class="nav-drawer">
@@ -2475,8 +2731,20 @@ button.icon-btn,
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" fill="currentColor" opacity=".7"/></svg>
       Reset
     </button>
-    <button class="btn-text md-theme-toggle" id="btn-theme-toggle" title="Toggle theme" aria-label="Toggle theme">
-      <span class="msr sm md-theme-icon">dark_mode</span>
+    <button type="button" class="nav-item nav-setup-btn" id="btn-setup-env" title="Set up Python environment">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      </svg>
+      <span>Set up environment</span>
+    </button>
+    <button type="button" class="nav-item md-theme-toggle" id="btn-theme-toggle" title="Toggle theme" aria-label="Toggle theme">
+      <svg class="md-theme-icon md-theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+      </svg>
+      <svg class="md-theme-icon md-theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4" fill="currentColor"/>
+        <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/>
+      </svg>
       <span class="md-theme-label">Dark mode</span>
     </button>
   </div>
@@ -2937,6 +3205,37 @@ button.icon-btn,
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════════
+     SETUP MODAL — in-app environment provisioning
+══════════════════════════════════════════════════════════════ -->
+<div class="lightbox-overlay setup-modal" id="setup-modal" style="z-index:25000;">
+  <div class="setup-modal-inner" role="dialog" aria-modal="true" aria-labelledby="setup-title">
+    <header class="setup-modal-head">
+      <div class="setup-modal-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v6"/><path d="M12 16v6"/>
+          <path d="M4.93 4.93l4.24 4.24"/><path d="M14.83 14.83l4.24 4.24"/>
+          <path d="M2 12h6"/><path d="M16 12h6"/>
+          <path d="M4.93 19.07l4.24-4.24"/><path d="M14.83 9.17l4.24-4.24"/>
+        </svg>
+      </div>
+      <div class="setup-modal-titles">
+        <h2 id="setup-title">Set up Python environment</h2>
+        <p id="setup-subtitle">Creates a private Python virtual environment under %LOCALAPPDATA%\AXIO_PREDICT\.venv and installs Flask, flask-cors, waitress, and Sybil. Allow ~5–15 minutes on first run (downloads PyTorch).</p>
+      </div>
+      <button type="button" class="setup-modal-x" id="setup-close-btn" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
+      </button>
+    </header>
+    <div class="setup-modal-phase" id="setup-phase">Ready</div>
+    <pre class="setup-modal-log" id="setup-log" aria-live="polite"></pre>
+    <footer class="setup-modal-foot">
+      <button type="button" class="btn-text" id="setup-cancel-btn">Close</button>
+      <button type="button" class="btn-filled" id="setup-start-btn">Start setup</button>
+    </footer>
+  </div>
+</div>
+
 <!-- Help / Reference Modal -->
 <div class="lightbox-overlay" id="help-modal" style="z-index:20000;">
   <div class="lightbox-inner" style="width:min(92vw,980px);max-width:980px;max-height:90vh;overflow-y:auto;background:var(--ax-bg1);border:1px solid var(--ax-border1);border-radius:14px;padding:0;text-align:left;">
@@ -3050,11 +3349,38 @@ button.icon-btn,
   const theme = stored || (systemDark ? 'dark' : 'light');
   document.documentElement.setAttribute('data-theme', theme);
 
+  // Tag the body with the platform so .app-titlebar can reserve space for
+  // macOS traffic lights / Linux fallback controls correctly.
+  try {
+    const plat = (window.sybilAPI && window.sybilAPI.platform) || '';
+    if (plat === 'darwin')      document.body.classList.add('is-mac');
+    else if (plat === 'win32')  document.body.classList.add('is-win');
+    else                         document.body.classList.add('is-linux');
+  } catch (_) {}
+
+  // Tell main to recolor the native Windows title-bar overlay buttons.
+  function syncTitleBarTheme(mode) {
+    try { window.sybilAPI && window.sybilAPI.setTitleBarTheme && window.sybilAPI.setTitleBarTheme(mode); }
+    catch (_) {}
+  }
+  syncTitleBarTheme(theme);
+
+  // Wire fallback Linux window controls (no-ops on Win/Mac, which use native buttons).
+  (function wireTitleBarControls() {
+    const root = document.getElementById('app-titlebar-controls');
+    if (!root || !window.sybilAPI) return;
+    root.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-act]'); if (!btn) return;
+      const act = btn.getAttribute('data-act');
+      if (act === 'minimize')  window.sybilAPI.windowMinimize?.();
+      else if (act === 'maximize') window.sybilAPI.windowMaximize?.();
+      else if (act === 'close')    window.sybilAPI.windowClose?.();
+    });
+  })();
+
   function applyToggleVisual() {
     const mode = document.documentElement.getAttribute('data-theme');
-    const icon = document.querySelector('.md-theme-icon');
     const label = document.querySelector('.md-theme-label');
-    if (icon)  icon.textContent  = mode === 'dark' ? 'light_mode' : 'dark_mode';
     if (label) label.textContent = mode === 'dark' ? 'Light mode' : 'Dark mode';
   }
 
@@ -3064,6 +3390,7 @@ button.icon-btn,
     document.documentElement.setAttribute('data-theme', next);
     try { localStorage.setItem(KEY, next); } catch (_) {}
     applyToggleVisual();
+    syncTitleBarTheme(next);
   }
 
   function bind() {
@@ -3188,7 +3515,16 @@ function setDeviceStatus(cls, label) {
 }
 
 window.sybilAPI.onBackendReady(() => { setDeviceStatus("ready","Backend ready"); fetchDeviceInfo(); });
-window.sybilAPI.onBackendError((m) => setDeviceStatus("error","Backend error: " + m));
+window.sybilAPI.onBackendError((m) => {
+  const short = (m || "").split("\n")[0] || "Backend failed to start";
+  setDeviceStatus("error", "Backend error: " + short);
+  // Show the full multi-line error (Python install hint + last stderr) so the
+  // user can see *why* the backend didn't come up, not just that it didn't.
+  try {
+    if (typeof showToast === "function") showToast(m, 12000);
+    else console.error("[Backend error]", m);
+  } catch (_) { console.error("[Backend error]", m); }
+});
 
 async function fetchDeviceInfo() {
   try {
@@ -5613,6 +5949,134 @@ document.getElementById("btn-dl-report").addEventListener("click", async () => {
     }
   });
   mo.observe(document.body, { childList: true, subtree: true });
+})();
+
+// ═══════════════════════════════════════════════════════════════════
+// SETUP MODAL — runs the in-app environment setup (creates user venv,
+// pip-installs Flask + Sybil) and restarts the backend on success.
+// ═══════════════════════════════════════════════════════════════════
+(function setupModal() {
+  const overlay   = document.getElementById('setup-modal');
+  const startBtn  = document.getElementById('setup-start-btn');
+  const cancelBtn = document.getElementById('setup-cancel-btn');
+  const closeBtn  = document.getElementById('setup-close-btn');
+  const logEl     = document.getElementById('setup-log');
+  const phaseEl   = document.getElementById('setup-phase');
+  const titleEl   = document.getElementById('setup-title');
+  const subtitleEl= document.getElementById('setup-subtitle');
+  const triggerBtn= document.getElementById('btn-setup-env');
+
+  if (!overlay) return;
+
+  let unsubscribe = null;
+  let running = false;
+  let autoOpenedOnce = false;
+
+  function open(reason) {
+    overlay.classList.add('open');
+    if (reason === 'auto') {
+      titleEl.textContent = 'Backend not available';
+      subtitleEl.textContent = 'AXIO PREDICT couldn’t find a Python environment with the required dependencies. Set one up now — it will be saved to your user folder and reused on future launches.';
+    } else {
+      titleEl.textContent = 'Set up Python environment';
+      subtitleEl.textContent = 'Creates a private Python virtual environment under %LOCALAPPDATA%\\AXIO_PREDICT\\.venv and installs Flask, flask-cors, waitress, and Sybil. Allow ~5–15 minutes on first run (downloads PyTorch).';
+    }
+  }
+  function close() {
+    if (running) return;  // don't close while pip is mid-install
+    overlay.classList.remove('open');
+  }
+
+  function appendLog(text) {
+    // pip uses \r for in-place progress bars — fold each \r-segment onto the
+    // last visible line so the log doesn't grow into a 50,000-line wall.
+    const segments = text.split(/\r(?!\n)/);
+    for (let i = 0; i < segments.length; i++) {
+      if (i === 0) {
+        logEl.textContent += segments[0];
+      } else {
+        // Replace text after the last \n with this carriage-return segment
+        const cur = logEl.textContent;
+        const lastNl = cur.lastIndexOf('\n');
+        logEl.textContent = (lastNl >= 0 ? cur.slice(0, lastNl + 1) : '') + segments[i];
+      }
+    }
+    logEl.scrollTop = logEl.scrollHeight;
+
+    // Lightweight phase label from key markers
+    const m = text.match(/▶\s*([^\n]+)/);
+    if (m) phaseEl.textContent = m[1];
+    if (text.includes('✓ Setup complete')) phaseEl.textContent = 'Finalizing — restarting backend…';
+  }
+
+  async function runSetup() {
+    if (running) return;
+    if (!window.sybilAPI || !window.sybilAPI.runSetup) {
+      appendLog('\nrunSetup is not available on this build.\n');
+      return;
+    }
+    running = true;
+    startBtn.disabled = true;
+    cancelBtn.disabled = true;
+    closeBtn.disabled = true;
+    startBtn.textContent = 'Running…';
+    phaseEl.textContent = 'Starting…';
+    logEl.textContent = '';
+
+    unsubscribe = window.sybilAPI.onSetupProgress(appendLog);
+    try {
+      const res = await window.sybilAPI.runSetup();
+      running = false;
+      closeBtn.disabled = false;
+      cancelBtn.disabled = false;
+      if (res && res.success) {
+        phaseEl.textContent = '✓ Setup complete — backend ready.';
+        startBtn.textContent = 'Done';
+        startBtn.classList.add('btn-filled');
+        startBtn.disabled = false;
+        startBtn.onclick = close;
+        if (typeof showToast === 'function') showToast('✓ Environment ready', 3000);
+      } else {
+        phaseEl.textContent = '✗ ' + (res && res.error ? res.error.split('\n')[0] : 'Setup failed.');
+        startBtn.textContent = 'Retry';
+        startBtn.disabled = false;
+      }
+    } catch (err) {
+      running = false;
+      closeBtn.disabled = false;
+      cancelBtn.disabled = false;
+      phaseEl.textContent = '✗ ' + (err && err.message || 'Setup failed.');
+      startBtn.textContent = 'Retry';
+      startBtn.disabled = false;
+    } finally {
+      if (typeof unsubscribe === 'function') { unsubscribe(); unsubscribe = null; }
+    }
+  }
+
+  startBtn.addEventListener('click', runSetup);
+  cancelBtn.addEventListener('click', close);
+  closeBtn.addEventListener('click', close);
+  if (triggerBtn) triggerBtn.addEventListener('click', () => open('manual'));
+
+  // Auto-open the first time the backend reports an error after launch.
+  // Subsequent errors only update the device chip — they don't re-pop the modal.
+  if (window.sybilAPI && typeof window.sybilAPI.onBackendError === 'function') {
+    // We've already attached an onBackendError handler earlier in the script;
+    // hook a second listener via the same once() bridge by re-binding here.
+    // (onBackendError uses ipcRenderer.once, so a second call would no-op
+    // after the first event — detect via the device chip instead.)
+    const dot = document.getElementById('device-dot');
+    if (dot) {
+      const obs = new MutationObserver(() => {
+        if (autoOpenedOnce) return;
+        if (dot.classList.contains('error')) {
+          autoOpenedOnce = true;
+          setTimeout(() => open('auto'), 250);
+        }
+      });
+      obs.observe(dot, { attributes: true, attributeFilter: ['class'] });
+    }
+  }
 })();
 
 </script>

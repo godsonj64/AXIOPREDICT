@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────
-#  AXIO PREDICT v2.0.0 — macOS Universal Build Script
-#  Produces: AXIO PREDICT-2.0.0-universal.dmg  (arm64 + x86_64)
-#            AXIO PREDICT-2.0.0-universal-mac.zip
+#  AXIO PREDICT v2.0.1 — macOS Universal Build Script
+#  Produces: AXIO PREDICT-2.0.1-universal.dmg  (arm64 + x86_64)
+#            AXIO PREDICT-2.0.1-universal-mac.zip
 # ─────────────────────────────────────────────────────────────────
 set -euo pipefail
 

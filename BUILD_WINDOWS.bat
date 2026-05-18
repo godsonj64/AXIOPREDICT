@@ -1,8 +1,8 @@
 @echo off
 REM ─────────────────────────────────────────────────────────────────
-REM  AXIO PREDICT v2.0.0 — Windows Build Script
-REM  Produces: AXIO PREDICT Setup 2.0.0.exe   (NSIS installer x64+x86)
-REM            AXIO PREDICT 2.0.0.exe          (Portable x64)
+REM  AXIO PREDICT v2.0.1 — Windows Build Script
+REM  Produces: AXIO PREDICT Setup 2.0.1.exe   (NSIS installer x64+x86)
+REM            AXIO PREDICT 2.0.1.exe          (Portable x64)
 REM ─────────────────────────────────────────────────────────────────
 setlocal enabledelayedexpansion
 

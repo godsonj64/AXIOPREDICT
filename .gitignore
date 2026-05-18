@@ -31,9 +31,8 @@ yarn-error.log*
 *.swo
 *~
 
-# Claude Code local config
-.claude/settings.local.json
-.claude/scheduled_tasks.lock
+# Local agent / tooling state (not part of the project)
+.claude/
 
 # Model checkpoints (download separately per README)
 *.ckpt

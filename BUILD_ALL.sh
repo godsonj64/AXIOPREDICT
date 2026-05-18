@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────
-#  AXIO PREDICT v2.0.0 — Cross-platform build (Mac Universal + Win)
+#  AXIO PREDICT v2.0.1 — Cross-platform build (Mac Universal + Win)
 #  Run this on macOS to produce both Mac and Windows builds.
 #  On Linux/Windows, use the platform-specific scripts instead.
 # ─────────────────────────────────────────────────────────────────

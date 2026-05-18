@@ -27,11 +27,25 @@
     "extraResources": [
       {
         "from": "../python_backend",
-        "to": "python_backend"
+        "to": "python_backend",
+        "filter": [
+          "**/*",
+          "!**/__pycache__/**",
+          "!**/*.pyc"
+        ]
       },
       {
         "from": "../sybil-source",
-        "to": "sybil-source"
+        "to": "sybil-source",
+        "filter": [
+          "**/*",
+          "!**/__pycache__/**",
+          "!**/*.pyc",
+          "!**/.venv/**",
+          "!**/venv/**",
+          "!**/.git/**",
+          "!**/*.egg-info/**"
+        ]
       }
     ],
     "mac": {
@@ -56,7 +70,39 @@
       ]
     },
     "win": {
-      "target": "nsis"
+      "icon": "assets/axiopredict-logo.png",
+      "executableName": "AXIO-PREDICT",
+      "artifactName": "${productName} Setup ${version}.${ext}",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AXIO PREDICT",
+      "menuCategory": "AXIO PREDICT",
+      "uninstallDisplayName": "AXIO PREDICT ${version}",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true
+    },
+    "portable": {
+      "artifactName": "${productName} ${version}.${ext}"
     },
     "linux": {
       "target": "AppImage"

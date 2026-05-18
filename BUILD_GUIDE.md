@@ -1,4 +1,4 @@
-# AXIO PREDICT v2.0.0 — Build Guide
+# AXIO PREDICT v2.0.1 — Build Guide
 
 ## Prerequisites
 
@@ -22,7 +22,7 @@ bash setup.sh
 bash BUILD_MAC.sh
 ```
 
-**Output:** `electron_app/dist/AXIO PREDICT-2.0.0-universal.dmg`
+**Output:** `electron_app/dist/AXIO PREDICT-2.0.1-universal.dmg`
 
 Supports: macOS 10.15+ on both Apple Silicon (M1/M2/M3) and Intel Macs.
 
@@ -39,8 +39,8 @@ BUILD_WINDOWS.bat
 ```
 
 **Output:**
-- `electron_app/dist/AXIO PREDICT Setup 2.0.0.exe` — NSIS Installer (x64 + x86)
-- `electron_app/dist/AXIO PREDICT 2.0.0.exe` — Portable (x64, no install needed)
+- `electron_app/dist/AXIO PREDICT Setup 2.0.1.exe` — NSIS Installer (x64 + x86)
+- `electron_app/dist/AXIO PREDICT 2.0.1.exe` — Portable (x64, no install needed)
 
 ---
 

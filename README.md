@@ -2,7 +2,7 @@
 
 > Cross-platform desktop application for lung cancer risk prediction from low-dose CT scans, powered by the Sybil v1.6.0 deep learning model.
 
-![Python](https://img.shields.io/badge/Python-3.8–3.12-blue?logo=python)
+![Python](https://img.shields.io/badge/Python-3.8–3.10-blue?logo=python)
 ![Node](https://img.shields.io/badge/Node.js-%E2%89%A516-green?logo=node.js)
 ![Electron](https://img.shields.io/badge/Electron-28-47848F?logo=electron)
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey)
@@ -55,13 +55,28 @@ AXIO PREDICT provides a local, privacy-preserving graphical interface for clinic
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| Python | 3.8–3.12 | Sybil inference backend |
-| Node.js | ≥ 16 | Electron runtime |
-| npm | ≥ 8 | Package management |
+| Python | 3.8–3.10 | Sybil inference backend (Sybil pins `python_requires=<3.11`) |
+| Node.js | ≥ 16 | Electron runtime (only needed for building from source) |
+| npm | ≥ 8 | Package management (only needed for building from source) |
+
+> **Windows users:** the installer ships an in-app setup wizard that will download and install a per-user Python 3.10.11 automatically on first launch if no compatible interpreter is found — no need to install Python yourself.
 
 ---
 
-## Installation
+## Quick Start (prebuilt installer)
+
+The fastest way to try AXIO PREDICT — no source build required.
+
+1. Download the latest release from the [Releases page](https://github.com/godsonj64/AXIOPREDICT/releases).
+   - **macOS:** `AXIO PREDICT-2.0.1-universal.dmg`
+   - **Windows:** `AXIO PREDICT Setup 2.0.1.exe` (installer) or `AXIO PREDICT 2.0.1.exe` (portable)
+2. Launch the app. The first run triggers the **Set up Python environment** wizard, which creates a private venv under `~/.axio_predict/` (macOS/Linux) or `%LOCALAPPDATA%\AXIO_PREDICT\` (Windows) and installs Sybil + PyTorch (5–15 minutes; downloads ~2 GB of model dependencies).
+3. Download the Sybil checkpoints (see [step 4 below](#4-download-model-checkpoints)).
+4. In the app: **Local Checkpoints** → browse to the checkpoints folder → **Load Model**.
+
+---
+
+## Installation (from source)
 
 ### 1. Clone the repository
 
