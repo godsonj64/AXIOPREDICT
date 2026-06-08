@@ -1,0 +1,63 @@
+name: Build macOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release tag to attach the macOS build to"
+        required: true
+        default: "v2.0.1"
+
+permissions:
+  contents: write
+
+jobs:
+  build-mac:
+    name: Build Universal macOS app
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: electron_app/package-lock.json
+
+      - name: Install dependencies
+        working-directory: electron_app
+        run: npm ci
+
+      - name: Build Universal DMG + ZIP (arm64 + x86_64)
+        working-directory: electron_app
+        env:
+          # App is distributed unsigned; skip signing-identity discovery so the
+          # build does not hang/fail looking for an Apple Developer certificate.
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+        run: npx electron-builder --mac --publish never
+
+      - name: List build output
+        run: ls -lh electron_app/dist/
+
+      - name: Upload build to workflow run (backup copy)
+        uses: actions/upload-artifact@v4
+        with:
+          name: axio-predict-macos
+          path: |
+            electron_app/dist/*.dmg
+            electron_app/dist/*-mac.zip
+            electron_app/dist/latest-mac.yml
+          if-no-files-found: error
+
+      - name: Attach build to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.release_tag }}
+          files: |
+            electron_app/dist/*.dmg
+            electron_app/dist/*-mac.zip
+            electron_app/dist/latest-mac.yml
+          fail_on_unmatched_files: false
