@@ -29,7 +29,11 @@ jobs:
 
       - name: Install dependencies
         working-directory: electron_app
-        run: npm ci
+        # --ignore-scripts skips the postinstall hook (bash ../setup.sh), which
+        # builds a local Python venv for end users and is not needed to package
+        # the app (the venv is never bundled). There are no native node deps to
+        # rebuild, so install-app-deps is unnecessary here too.
+        run: npm ci --ignore-scripts
 
       - name: Build Universal DMG + ZIP (arm64 + x86_64)
         working-directory: electron_app
